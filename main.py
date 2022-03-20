@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import fxnfile as fn
 import seaborn as sns
 import matplotlib.pyplot as plt
 from xgboost import XGBRegressor
@@ -48,6 +49,23 @@ parameters = {'max_depth': [20, 19, 18, 17, 16, 15],
 estimator = XGBRegressor() 
 grid_search = gs(estimator=estimator,param_grid=parameters,scoring = 'neg_root_mean_squared_error',cv = 10,verbose=True)
 grid_search.fit(variables_train_x, emission_train_y)                      
-best_parameter = grid_search.best_estimator_
-
-predicted = best_parameter.predict(variable_test_x)
+best_parameter = grid_search.best_estimator
+#
+# This function gives the predicted values                     
+#                    
+predicted = fn.prediction (variables_train_x, emission_train_y, variable_test_x, best_parameter)
+#
+# This function compares the emission rata with time
+#
+fn.integral_plot_WLTC (observed, predicted, time)
+#                     
+# Comparing the emission rate of predicted and observed
+#    
+fn.compare_emi_rate_WLTC (observed, predicted, time)                    
+#                     
+# Evaluation function
+#    
+fn.evaluation (observed, predicted)                    
+                     
+                     
+                     
