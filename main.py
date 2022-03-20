@@ -1,6 +1,20 @@
+import numpy as np
 import pandas as pd
-import fxnfile as fn 
 import seaborn as sns
 import matplotlib.pyplot as plt
-from xgboost import XGBRegressor as xgb
-from sklearn.model_selection import train_test_split as tt
+
+df = pd.ExcelFile('comb.xlsx').parse('0c')
+corr = df.corr()
+#
+# Generate a mask for upper traingle
+#
+mask = np.triu(np.ones_like(corr, dtype=bool))
+#
+# Configure a custom diverging colormap
+#
+cmap = sns.diverging_palette(230, 20, as_cmap=True)
+#
+# Draw the heatmap
+#
+sns.heatmap(corr, annot=True, mask = mask, cmap=cmap)
+plt.show()
