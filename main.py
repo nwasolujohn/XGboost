@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from xgboost import XGBRegressor
+from sklearn.model_selection import GridSearchCV as gs
 
 df = pd.ExcelFile('comb.xlsx').parse('0c')
 corr = df.corr()
@@ -44,7 +46,7 @@ parameters = {'max_depth': [20, 19, 18, 17, 16, 15],
               "colsample_bytree" : [ 0.3, 0.4, 0.5 , 0.7 ] }}
 
 estimator = XGBRegressor() 
-grid_search = GridSearchCV(estimator=estimator,param_grid=parameters,scoring = 'neg_root_mean_squared_error',cv = 10,verbose=True)
+grid_search = gs(estimator=estimator,param_grid=parameters,scoring = 'neg_root_mean_squared_error',cv = 10,verbose=True)
 grid_search.fit(variables_train_x, emission_train_y)                      
 best_parameter = grid_search.best_estimator_
 
